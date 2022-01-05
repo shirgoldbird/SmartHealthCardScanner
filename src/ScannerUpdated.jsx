@@ -677,6 +677,22 @@ const ScannerUpdated = () => {
     console.error(err)
   }
 
+  const onSubmit = (event) => {
+      event.preventDefault();
+      const qrData = event.target.value;
+      handleScan(qrData);
+      var frm = document.getElementsByName('barcodeScanner')[0];
+      frm.reset();  // Reset all form data
+  }
+
+  const onKeyDown = (event) => {
+      // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation();
+        onSubmit(event);
+      }
+    }
 
 
   const classes = useStyles();
@@ -687,10 +703,26 @@ const ScannerUpdated = () => {
         <Container maxWidth="sm" >
           <Card className={classes.root} >
             <CardHeader style={{ textAlign: "center"}}
-              title="SHC QR Scanner"
-              subheader="All data is handled client side! Nothing is ever sent to the server!"
+              title="COVID Vaccination QR Scanner"
+              subheader="Click the textbox below, scan the attendee's QR code using your barcode scanner, and wait for it to be verified."
             />
-          <CardContent style={{display: "flex", justifyContent: "center"}} >
+        <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}} >
+            <form name="barcodeScanner">
+                <h3 style={{ display: "block"}}>Barcode Scan QR Code</h3>
+                <br />
+                {/* <textarea type="text" id="qrData" rows="4" cols="50">
+                </textarea> */}
+                <input
+                    aria-multiline="true"
+                    contentEditable={true}
+                    onKeyDown={(e) => onKeyDown(e)}
+                    style={{'width': '500px'}}
+                />
+                <br /><br />
+                <button type="submit">Submit</button>
+            </form>
+        </CardContent>
+          {/* <CardContent style={{display: "flex", justifyContent: "center"}} >
               <QrReader
                 delay={500}
                 resolution={600}
@@ -699,7 +731,7 @@ const ScannerUpdated = () => {
                 style={{ width: '80%' }}
                 showViewFinder={false}
               />
-            </CardContent>
+            </CardContent> */}
             <CardContent>
               {!scanned ?
                 <div style={{ textAlign: "center"}}>
@@ -721,9 +753,9 @@ const ScannerUpdated = () => {
                           <p style={{color: "green"}}><CheckCircleOutlineIcon style={{fill: "green"}}/> Payload Verified!</p>
                           <p style={{color: "green"}}><CheckCircleOutlineIcon style={{fill: "green"}}/> Signature Verified!</p>
                           <p style={{color: "green"}}><CheckCircleOutlineIcon style={{fill: "green"}}/> Issuer Verified in VCI Directory!</p>
-                            <a href={pdfBytes2} download={fileName}>
+                            {/* <a href={pdfBytes2} download={fileName}>
                                <Button className={classes.button}>Download as PDF</Button>
-                            </a>
+                            </a> */}
                         </div>
                         :
                         <div>
@@ -743,20 +775,7 @@ const ScannerUpdated = () => {
               }
 
             </CardContent>
-            <CardActions disableSpacing>
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded2,
-                })}
-                onClick={handleExpandClick2}
-                aria-expanded={expanded2}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon />
-                <p>Parsed Information</p>
-              </IconButton>
-            </CardActions>
-            <Collapse in={expanded2} timeout="auto" unmountOnExit>
+
               <CardContent>
                 <Typography paragraph variant="h6">Name:</Typography>
                 <Typography paragraph>{firstName} {middleInitial} {lastName}</Typography>
@@ -769,7 +788,7 @@ const ScannerUpdated = () => {
                 <Typography paragraph variant="h6">Vaccine Date Two:</Typography>
                 <Typography paragraph>{vaccDate2}</Typography>
               </CardContent>
-            </Collapse>
+
             <CardActions disableSpacing>
               <IconButton
                 className={clsx(classes.expand, {
