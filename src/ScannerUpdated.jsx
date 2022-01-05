@@ -91,23 +91,37 @@ const ScannerUpdated = () => {
           console.log(e.kid);
           setVerification(true);
         } else {
-          setError('Signature is not valid from the listed issuer.')
+            console.log('Signature is not valid from the listed issuer.')
+            setError('Signature is not valid from the listed issuer.')
         }
       })
       let issDir = await axios.get("https://raw.githubusercontent.com/the-commons-project/vci-directory/main/vci-issuers.json");
       if(issDir.data.participating_issuers.some(e => e.iss === issuerHere )) {
         setInVCI(true);
+        console.log("set vci")
       }
+      console.log("Setting result to true")
       setResult(true)
     } catch (err) {
-      setError("Please hold the QR code up for a bit longer!")
+        console.log("catching error")
+        setError("Please hold the QR code up for a bit longer!")
     }
   }
 
   const handleScan = async (data) => {
     if (data) {
+      setError('');
       setScanned(true);
-      let splitData = data.split("/")[1].match(/(..?)/g).map((number) => String.fromCharCode(parseInt(number, 10) + 45)).join("");
+      let splitData;
+      try {
+          splitData = data.split("/")[1].match(/(..?)/g).map((number) => String.fromCharCode(parseInt(number, 10) + 45)).join("");
+      } catch(error) {
+          console.log("Can't split data: ", data)
+          console.log("Error: ", error)
+          setError('Not a valid SmartHealth code. Please request additional proof of vaccination.')
+          setScanned(false)
+          return
+      }
       setSignatureJWS(splitData.split(".")[2]);
       setDecodedHeader(JSON.stringify(JSON.parse(Buffer.from(splitData.split(".")[0], "base64")), null, 2));
       setDecodedPayload(JSON.stringify(JSON.parse(pako.inflateRaw(Buffer.from(splitData.split(".")[1], "base64"), { to: 'string'}))));
@@ -235,9 +249,11 @@ const ScannerUpdated = () => {
               }
               break;
           }
+        } else {
+            setError('QR code is not a valid SmartHealth code. Please request additional proof of vaccination.')
+            setScanned(false)
         }
       }
-
         createPDF(data, splitData);
       }
   }
@@ -724,6 +740,7 @@ const ScannerUpdated = () => {
               title="COVID Vaccination QR Scanner"
               subheader="Click the textbox below, scan the attendee's QR code using your barcode scanner, and wait for it to be verified."
             />
+            { error !== '' ? <div style={{ color: "red", fontWeight: "bolder"}}>ERROR! {error}</div> : null}
         { (scanned) ? 
         <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}} >
             <button 
@@ -763,7 +780,7 @@ const ScannerUpdated = () => {
                   <h3>Awaiting Scan</h3>
                 </div>
                 : [
-                  !verified  ?
+                  !result  ?
                     <Loader
                       type="TailSpin"
                       color="#a794d1"
