@@ -677,20 +677,38 @@ const ScannerUpdated = () => {
     console.error(err)
   }
 
+  const clearData = () => {
+    setScanned(false) 
+    setResult(false)
+    setVerification(false)
+    setFirstName('')
+    setLastName('')
+    setMiddleInitial('')
+    setBirthDate('')
+    setCVXCode('')
+    setVaccDate1('')
+    setVaccDate2('')
+  }
+
+  // get the data from the overall form submission
   const onSubmit = (event) => {
       event.preventDefault();
-      const qrData = event.target.value;
+      const qrData = event.target[0].value;
       handleScan(qrData);
       var frm = document.getElementsByName('barcodeScanner')[0];
       frm.reset();  // Reset all form data
   }
 
+  // get the data from someone pressing enter in the textbox
   const onKeyDown = (event) => {
       // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
       if (event.key === 'Enter') {
         event.preventDefault();
         event.stopPropagation();
-        onSubmit(event);
+        const qrData = event.target.value;
+        handleScan(qrData);
+        var frm = document.getElementsByName('barcodeScanner')[0];
+        frm.reset();  // Reset all form data
       }
     }
 
@@ -706,12 +724,18 @@ const ScannerUpdated = () => {
               title="COVID Vaccination QR Scanner"
               subheader="Click the textbox below, scan the attendee's QR code using your barcode scanner, and wait for it to be verified."
             />
+        { (scanned) ? 
         <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}} >
-            <form name="barcodeScanner">
-                <h3 style={{ display: "block"}}>Barcode Scan QR Code</h3>
+            <button 
+                onClick={() => clearData()}>
+                Scan another code
+            </button>
+        </CardContent>
+        :
+        <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}} >
+            <form name="barcodeScanner" onSubmit={e => onSubmit(e)}>
+                <h3 style={{ display: "block", textAlign: "center"}}>Barcode Scan QR Code</h3>
                 <br />
-                {/* <textarea type="text" id="qrData" rows="4" cols="50">
-                </textarea> */}
                 <input
                     aria-multiline="true"
                     contentEditable={true}
@@ -722,6 +746,7 @@ const ScannerUpdated = () => {
                 <button type="submit">Submit</button>
             </form>
         </CardContent>
+        }
           {/* <CardContent style={{display: "flex", justifyContent: "center"}} >
               <QrReader
                 delay={500}
@@ -789,7 +814,7 @@ const ScannerUpdated = () => {
                 <Typography paragraph>{vaccDate2}</Typography>
               </CardContent>
 
-            <CardActions disableSpacing>
+            {/* <CardActions disableSpacing>
               <IconButton
                 className={clsx(classes.expand, {
                   [classes.expandOpen]: expanded,
@@ -811,7 +836,7 @@ const ScannerUpdated = () => {
                 <Typography paragraph variant="h6" style={{marginTop: 20}}>Signature:</Typography>
                 <Typography paragraph variant="body">{signatureJWS}</Typography>
               </Collapse>
-            </CardContent>
+            </CardContent> */}
           </Card>
         </Container>
       </Box>
