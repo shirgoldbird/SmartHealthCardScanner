@@ -35,9 +35,9 @@ function Navbar() {
             <HomeIcon />
           </IconButton>
           <Typography variant="body" className={classes.title}>
-            SHC Scanner
+            SmartHealth QR Scanner
           </Typography>
-          <Button color="inherit" href="/file" style={{ wordBreak: "break-all", fontSize: '13px'}}>Scan From File</Button>
+          {/* <Button color="inherit" href="/file" style={{ wordBreak: "break-all", fontSize: '13px'}}>Scan From File</Button> */}
         </Toolbar>
       </AppBar>
     </div>

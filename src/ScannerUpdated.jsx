@@ -738,8 +738,10 @@ const ScannerUpdated = () => {
           <Card className={classes.root} >
             <CardHeader style={{ textAlign: "center"}}
               title="COVID Vaccination QR Scanner"
-              subheader="Click the textbox below, scan the attendee's QR code using your barcode scanner, and wait for it to be verified."
+            //   subheader="Click the textbox below, scan the attendee's QR code using your barcode scanner, and wait for it to be verified."
             />
+            <b style={{textAlign: "center"}}>NOTE:</b> Only validates SmartHealth QR codes issued by <a href="https://www.commontrustnetwork.org/verifier-list" target="_blank">trusted providers</a>. Others will return an error.
+            <br /><br />
             { error !== '' ? <div style={{ color: "red", fontWeight: "bolder"}}>ERROR! {error}</div> : null}
         { (scanned) ? 
         <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}} >
@@ -752,7 +754,7 @@ const ScannerUpdated = () => {
         <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}} >
             <form name="barcodeScanner" onSubmit={e => onSubmit(e)}>
                 <h3 style={{ display: "block", textAlign: "center"}}>Barcode Scan QR Code</h3>
-                <br />
+                <p style={{ display: "block", textAlign: "center"}}>Click the box below and scan the provided QR code. Confirm it returns "Signatured Verified!" and the attendee's name and DOB match.</p>
                 <input
                     aria-multiline="true"
                     contentEditable={true}

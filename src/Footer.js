@@ -31,8 +31,8 @@ function Footer() {
   return (
     <div>
       <AppBar position="fixed" color="primary" className={classes.appBar}>
-        <Button color="inherit" href="https://github.com/damaguire/SmartHealthCardScanner" className={classes.fabButton}>Github Repo</Button>
-        <Button color="inherit" href="https://github.com/damaguire/SmartHealthCardScanner/commits/main" className={classes.fabButton2}>v1.3.2</Button>
+        <Button color="inherit" href="https://github.com/shirgoldbird/SmartHealthCardScanner" className={classes.fabButton}>Github Repo</Button>
+        <Button color="inherit" href="https://github.com/shirgoldbird/SmartHealthCardScanner/commits/main" className={classes.fabButton2}>v1.3.3</Button>
       </AppBar>
     </div>
   );
