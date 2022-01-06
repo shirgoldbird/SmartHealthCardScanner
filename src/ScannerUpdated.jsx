@@ -754,7 +754,7 @@ const ScannerUpdated = () => {
         <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}} >
             <form name="barcodeScanner" onSubmit={e => onSubmit(e)}>
                 <h3 style={{ display: "block", textAlign: "center"}}>Barcode Scan QR Code</h3>
-                <p style={{ display: "block", textAlign: "center"}}>Click the box below and scan the provided QR code. Confirm it returns "Signatured Verified!" and the attendee's name and DOB match.</p>
+                <p style={{ display: "block", textAlign: "center"}}>Click the box below and scan the provided QR code. Confirm it returns "Signature Verified!" and the attendee's name and DOB match.</p>
                 <input
                     aria-multiline="true"
                     contentEditable={true}
